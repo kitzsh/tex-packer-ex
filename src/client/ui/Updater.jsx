@@ -10,6 +10,8 @@ class Updater extends React.Component {
     constructor(props) {
         super(props);
 
+        this.downloadProgressRef = React.createRef();
+
         this.state = {
             installation: false,
             downloadProgress: 0
@@ -70,7 +72,7 @@ class Updater extends React.Component {
                         ?
                         (
                             <div className="updater-download">
-                                <div ref="downloadProgress" className="updater-download-progress" style={{width: this.state.downloadProgress+"%"}}></div>
+                                <div ref={this.downloadProgressRef} className="updater-download-progress" style={{width: this.state.downloadProgress+"%"}}></div>
                             </div>
                         )
                         :

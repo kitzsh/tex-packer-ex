@@ -12,6 +12,11 @@ const STORAGE_CUSTOM_EXPORTER_KEY = "custom-exporter";
 class EditCustomExporter extends React.Component {
     constructor(props) {
         super(props);
+
+        this.contentRef = React.createRef();
+        this.allowTrimRef = React.createRef();
+        this.allowRotationRef = React.createRef();
+        this.fileExtRef = React.createRef();
         
         this.save = this.save.bind(this);
     }
@@ -23,10 +28,10 @@ class EditCustomExporter extends React.Component {
     save() {
         let exporter = getExporterByType("custom");
         
-        let content = ReactDOM.findDOMNode(this.refs.content).value;
-        let allowTrim = ReactDOM.findDOMNode(this.refs.allowTrim).checked;
-        let allowRotation = ReactDOM.findDOMNode(this.refs.allowRotation).checked;
-        let fileExt = ReactDOM.findDOMNode(this.refs.fileExt).value;
+        let content = this.contentRef.current.value;
+        let allowTrim = this.allowTrimRef.current.checked;
+        let allowRotation = this.allowRotationRef.current.checked;
+        let fileExt = this.fileExtRef.current.value;
         
         try {
             mustache.parse(content);
@@ -57,18 +62,18 @@ class EditCustomExporter extends React.Component {
                     </div>
                     
                     <div>
-                        <textarea ref="content" className="edit-custom-exporter-data" defaultValue={exporter.content}></textarea>
+                        <textarea ref={this.contentRef} className="edit-custom-exporter-data" defaultValue={exporter.content}></textarea>
                     </div>
                     
                     <div>
                         <b>{I18.f("ALLOW_TRIM")}</b>
-                        <input ref="allowTrim" className="border-color-gray" type="checkbox" defaultChecked={exporter.allowTrim ? "checked" : ""}/>
+                        <input ref={this.allowTrimRef} className="border-color-gray" type="checkbox" defaultChecked={exporter.allowTrim ? "checked" : ""}/>
 
                         <b>{I18.f("ALLOW_ROTATION")}</b>
-                        <input ref="allowRotation" className="border-color-gray" type="checkbox" defaultChecked={exporter.allowRotation ? "checked" : ""}/>
+                        <input ref={this.allowRotationRef} className="border-color-gray" type="checkbox" defaultChecked={exporter.allowRotation ? "checked" : ""}/>
 
                         <b>{I18.f("FILE_EXT")}</b>
-                        <input ref="fileExt" className="border-color-gray" type="text" defaultValue={exporter.fileExt}/>
+                        <input ref={this.fileExtRef} className="border-color-gray" type="text" defaultValue={exporter.fileExt}/>
                     </div>
                     
                     <div className="edit-custom-exporter-controls">

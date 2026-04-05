@@ -14,6 +14,16 @@ var base64js = require('base64-js')
 class SheetSplitter extends React.Component {
     constructor(props) {
         super(props);
+
+        this.selectTextureInputRef = React.createRef();
+        this.textureNameRef = React.createRef();
+        this.dataFileNameRef = React.createRef();
+        this.dataFormatRef = React.createRef();
+        this.holdtrimRef = React.createRef();
+        this.viewRef = React.createRef();
+        this.widthRef = React.createRef();
+        this.heightRef = React.createRef();
+        this.paddingRef = React.createRef();
         
         this.textureBackColors = ["grid-back", "white-back", "pink-back", "black-back"];
         this.step = 0.1;
@@ -92,7 +102,7 @@ class SheetSplitter extends React.Component {
         let ctx = this.buffer.getContext('2d');
         let files = [];
         
-        let holdTrim = ReactDOM.findDOMNode(this.refs.holdtrim).checked;
+        let holdTrim = this.holdtrimRef.current.checked;
         
         for(let item of this.frames) {            
             let trimmed = item.trimmed ? holdTrim : false;            
@@ -185,7 +195,7 @@ class SheetSplitter extends React.Component {
                 this.textureName = keys[0]; 
                 
                 this.texture = data[this.textureName];
-                ReactDOM.findDOMNode(this.refs.textureName).innerHTML = this.textureName;
+                this.textureNameRef.current.innerHTML = this.textureName;
                 
                 this.updateView();
 
@@ -195,7 +205,7 @@ class SheetSplitter extends React.Component {
     }
     
     updateTexture() {
-        let canvas = ReactDOM.findDOMNode(this.refs.view);
+        let canvas = this.viewRef.current;
         
         if(this.texture) {
             canvas.width = this.texture.width;
@@ -229,7 +239,7 @@ class SheetSplitter extends React.Component {
                 this.data = new TextDecoder("utf-8").decode(byteArray);;
 
                 this.dataName = item.name;
-                ReactDOM.findDOMNode(this.refs.dataFileName).innerHTML = this.dataName;
+                this.dataFileNameRef.current.innerHTML = this.dataName;
                 
                 // fixes a bug where the view doesn't update when you select the texture before the data
                 if (this.state.splitter){
@@ -252,14 +262,14 @@ class SheetSplitter extends React.Component {
         this.state.splitter.split(this.data, {
             textureWidth: this.texture.width,
             textureHeight: this.texture.height,
-            width: ReactDOM.findDOMNode(this.refs.width).value * 1 || 32,
-            height: ReactDOM.findDOMNode(this.refs.height).value * 1 || 32,
-            padding: ReactDOM.findDOMNode(this.refs.padding).value * 1 || 0
+            width: this.widthRef.current.value * 1 || 32,
+            height: this.heightRef.current.value * 1 || 32,
+            padding: this.paddingRef.current.value * 1 || 0
         }, frames => {
             if(frames) {
                 this.frames = frames;
 
-                let canvas = ReactDOM.findDOMNode(this.refs.view);
+                let canvas = this.viewRef.current;
                 let ctx = canvas.getContext('2d');
 
                 for(let item of this.frames) {
@@ -309,7 +319,7 @@ class SheetSplitter extends React.Component {
             if(this.textureBackColors.indexOf(name) >= 0) {
                 this.setState({textureBack: name});
 
-                let canvas = ReactDOM.findDOMNode(this.refs.view);
+                let canvas = this.viewRef.current;
                 canvas.className = name;
 
                 return;
@@ -322,7 +332,7 @@ class SheetSplitter extends React.Component {
             let w = Math.floor(this.texture.width * val);
             let h = Math.floor(this.texture.height * val);
 
-            let canvas = ReactDOM.findDOMNode(this.refs.view);
+            let canvas = this.viewRef.current;
             canvas.style.width = w + 'px';
             canvas.style.height = h + 'px';
         }
@@ -349,7 +359,7 @@ class SheetSplitter extends React.Component {
                 break;
             }
         }
-        
+
         return (
             <div className="sheet-splitter-shader">
                 <div className="sheet-splitter-content">
@@ -360,20 +370,20 @@ class SheetSplitter extends React.Component {
                                     <td>
                                         <div className="btn back-800 border-color-gray color-white file-upload">
                                             {I18.f("SELECT_TEXTURE")}
-                                            <input type="file" ref="selectTextureInput" accept="image/png,image/jpg,image/jpeg,image/gif" onChange={this.selectTexture} />
+                                            <input type="file" ref={this.selectTextureInputRef} accept="image/png,image/jpg,image/jpeg,image/gif" onChange={this.selectTexture} />
                                         </div>
                                     </td>
                                     <td>
-                                        <div className="back-400 border-color-gray color-black sheet-splitter-info-text" ref="textureName">&nbsp;</div>
+                                        <div className="back-400 border-color-gray color-black sheet-splitter-info-text" ref={this.textureNameRef}>&nbsp;</div>
                                     </td>
                                     <td>
                                         <div className="btn back-800 border-color-gray color-white file-upload">
                                             {I18.f("SELECT_DATA_FILE")}
-                                            <input type="file" ref="selectTextureInput" onChange={this.selectDataFile} />
+                                            <input type="file" ref={this.selectTextureInputRef} onChange={this.selectDataFile} />
                                         </div>
                                     </td>
                                     <td>
-                                        <div className="back-400 border-color-gray color-black sheet-splitter-info-text" ref="dataFileName">&nbsp;</div>
+                                        <div className="back-400 border-color-gray color-black sheet-splitter-info-text" ref={this.dataFileNameRef}>&nbsp;</div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -381,7 +391,7 @@ class SheetSplitter extends React.Component {
                     </div>
 
                     <div ref={this.wheelRef} className="sheet-splitter-view">
-                        <canvas ref='view'/>
+                        <canvas ref={this.viewRef}/>
                     </div>
 
                     <div className="sheet-splitter-controls">
@@ -390,7 +400,7 @@ class SheetSplitter extends React.Component {
                                 <tr>
                                     <td>{I18.f('FORMAT')}</td>
                                     <td>
-                                        <select ref="dataFormat" className="border-color-gray" value={this.state.splitter.type} onChange={this.changeSplitter}>
+                                        <select ref={this.dataFormatRef} className="border-color-gray" value={this.state.splitter.type} onChange={this.changeSplitter}>
                                             {splitters.map(node => {
                                                 return (<option key={"data-format-" + node.type} defaultValue={node.type}>{node.type}</option>)
                                             })}
@@ -400,25 +410,25 @@ class SheetSplitter extends React.Component {
                                 <tr>
                                     <td>{I18.f('HOLD_TRIM')}</td>
                                     <td>
-                                        <input ref="holdtrim" type="checkbox" className="border-color-gray"/>
+                                        <input ref={this.holdtrimRef} type="checkbox" className="border-color-gray"/>
                                     </td>
                                 </tr>
                                 <tr style={{display: displayGridProperties}}>
                                     <td>{I18.f('WIDTH')}</td>
                                     <td>
-                                        <input type="number" ref='width' defaultValue='64' onChange={this.updateView}/>
+                                        <input type="number" ref={this.widthRef} defaultValue='64' onChange={this.updateView}/>
                                     </td>
                                 </tr>
                                 <tr style={{display: displayGridProperties}}>
                                     <td>{I18.f('HEIGHT')}</td>
                                     <td>
-                                        <input type="number" ref='height' defaultValue='64' onChange={this.updateView}/>
+                                        <input type="number" ref={this.heightRef} defaultValue='64' onChange={this.updateView}/>
                                     </td>
                                 </tr>
                                 <tr style={{display: displayGridProperties}}>
                                     <td>{I18.f('PADDING')}</td>
                                     <td>
-                                        <input type="number" ref='padding' defaultValue='0' onChange={this.updateView}/>
+                                        <input type="number" ref={this.paddingRef} defaultValue='0' onChange={this.updateView}/>
                                     </td>
                                 </tr>
                             </tbody>

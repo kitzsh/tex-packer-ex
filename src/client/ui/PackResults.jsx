@@ -8,6 +8,8 @@ class PackResults extends React.Component {
     constructor(props) {
         super(props);
 
+        this.spritesPlayerRef = React.createRef();
+
         this.textureBackColors = ["grid-back", "white-back", "pink-back", "black-back"];
         this.step = 0.1;
 
@@ -122,7 +124,7 @@ class PackResults extends React.Component {
                             {views}
                         </div>
                         <div className={!this.state.playerVisible ? "block-hidden" : "block-visible"}>
-                            <SpritesPlayer ref="spritesPlayer" data={this.state.packResult} start={this.state.playerVisible} textureBack={this.state.textureBack} />
+                            <SpritesPlayer ref={this.spritesPlayerRef} data={this.state.packResult} start={this.state.playerVisible} textureBack={this.state.textureBack} />
                         </div>
                     </div>
                     

@@ -8,6 +8,13 @@ class SpritesPlayer extends React.Component {
     
     constructor(props) {
         super(props);
+        
+        this.containerRef = React.createRef();
+        this.playerContainerRef = React.createRef();
+        this.viewRef = React.createRef();
+        this.bufferRef = React.createRef();
+        this.speedRef = React.createRef();
+        this.fpsRef = React.createRef();
                 
         this.textures = [];
 
@@ -45,7 +52,7 @@ class SpritesPlayer extends React.Component {
     }
     
     setup() {
-        ReactDOM.findDOMNode(this.refs.playerContainer).className = "player-view-container " + this.props.textureBack;
+        this.playerContainerRef.current.className = "player-view-container " + this.props.textureBack;
         
         this.textures = [];
         
@@ -72,7 +79,7 @@ class SpritesPlayer extends React.Component {
         if(this.width < 256) this.width = 256;
         if(this.height < 200) this.height = 200;
 
-        let canvas = ReactDOM.findDOMNode(this.refs.view);
+        let canvas = this.viewRef.current;
         canvas.width = this.width;
         canvas.height = this.height;
         
@@ -122,18 +129,18 @@ class SpritesPlayer extends React.Component {
         }
         this.renderTexture();
 
-        this.updateTimer = setTimeout(this.update, 1000 / ReactDOM.findDOMNode(this.refs.speed).value);
+        this.updateTimer = setTimeout(this.update, 1000 / this.speedRef.current.value);
     }
 
     renderTexture() {
-        let ctx = ReactDOM.findDOMNode(this.refs.view).getContext("2d");
+        let ctx = this.viewRef.current.getContext("2d");
 
         ctx.clearRect(0, 0, this.width, this.height);
 
         let texture = this.currentTextures[this.currentFrame];
         if(!texture) return;
         
-        let buffer = ReactDOM.findDOMNode(this.refs.buffer);
+        let buffer = this.bufferRef.current;
         buffer.width = texture.config.sourceSize.w;
         buffer.height = texture.config.sourceSize.h;
         
@@ -174,14 +181,14 @@ class SpritesPlayer extends React.Component {
     stop() {
         clearTimeout(this.updateTimer);
     }
-    
+
     render() {
         return (
-            <div ref="container" className="player-container">
+            <div ref={this.containerRef} className="player-container">
                 <div className="player-window border-color-gray">
-                    <div ref="playerContainer">
-                        <canvas ref="view"> </canvas>
-                        <canvas ref="buffer" className="player-buffer"> </canvas>
+                    <div ref={this.playerContainerRef}>
+                        <canvas ref={this.viewRef}> </canvas>
+                        <canvas ref={this.bufferRef} className="player-buffer"> </canvas>
                     </div>
                     <div>
                         <table>
@@ -191,10 +198,10 @@ class SpritesPlayer extends React.Component {
                                     {I18.f("ANIMATION_SPEED")}
                                 </td>
                                 <td>
-                                    <input type="range" ref="speed" max="60" min="1" defaultValue="10" onChange={this.onSpeedChange}/>                                    
+                                    <input type="range" ref={this.speedRef} max="60" min="1" defaultValue="10" onChange={this.onSpeedChange}/>                                    
                                 </td>
                                 <td>                                    
-                                    <div ref="fps" className="player-fps">10 fps</div>                                    
+                                    <div ref={this.fpsRef} className="player-fps">10 fps</div>                                    
                                 </td>
                             </tr>
                             </tbody>

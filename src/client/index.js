@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import I18 from './utils/I18';
 import APP from './APP';
@@ -41,7 +42,8 @@ function loadLocalization() {
 
 function renderLayout() {
     Controller.updateLocale();
-    layout = ReactDOM.render(React.createElement(MainLayout), document.getElementById("root"));
+    const root = createRoot(document.getElementById("root"));
+    layout = root.render(React.createElement(MainLayout));
 }
 
 function injectCss(path) {

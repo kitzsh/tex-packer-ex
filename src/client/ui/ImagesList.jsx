@@ -20,6 +20,11 @@ class ImagesList extends React.Component {
         super(props);
 
         INSTANCE = this;
+
+        this.imagesTreeRef = React.createRef();
+        this.dropHelpRef = React.createRef();
+        this.addZipInputRef = React.createRef();
+        this.addImagesInputRef = React.createRef();
         
         this.addImages = this.addImages.bind(this);
         this.addZip = this.addZip.bind(this);
@@ -57,7 +62,7 @@ class ImagesList extends React.Component {
 		
 		window.removeEventListener("keydown", this.handleKeys, false);
     }
-	
+        
 	handleKeys(e) {
 		if(e) {
             let key = e.keyCode || e.which;
@@ -66,18 +71,18 @@ class ImagesList extends React.Component {
 	}
     
     componentDidMount() {
-        let dropZone = ReactDOM.findDOMNode(this.refs.imagesTree);
+        let dropZone = this.imagesTreeRef.current;
         if(dropZone) {
             dropZone.ondrop = this.onFilesDrop;
 
             dropZone.ondragover = () => {
-                let help = ReactDOM.findDOMNode(this.refs.dropHelp);
+                let help = this.dropHelpRef.current;
                 if(help) help.className = "image-drop-help selected";
                 return false;
             };
 
             dropZone.ondragleave = () => {
-                let help = ReactDOM.findDOMNode(this.refs.dropHelp);
+                let help = this.dropHelpRef.current;
                 if(help) help.className = "image-drop-help";
                 return false;
             };
@@ -95,7 +100,7 @@ class ImagesList extends React.Component {
         this.setState({images: images});
         Observer.emit(GLOBAL_EVENT.IMAGES_LIST_CHANGED, images);
     }
-    
+        
     onFilesDrop(e) {
         e.preventDefault();
         
@@ -115,7 +120,7 @@ class ImagesList extends React.Component {
             loader.load(e.target.files, null, data => this.loadImagesComplete(data));
         }
     }
-    
+
     addZip(e) {
         let file = e.target.files[0];
         if(file) {
@@ -181,14 +186,14 @@ class ImagesList extends React.Component {
             FileSystem.loadImages([{name: name, path: data.path, folder: folder}], this.loadImagesComplete);
         }
     }
-    
+
     loadImagesComplete(data=[]) {
 
         Observer.emit(GLOBAL_EVENT.HIDE_SHADER);
         
         if(PLATFORM === "web") {
-            ReactDOM.findDOMNode(this.refs.addImagesInput).value = "";
-            ReactDOM.findDOMNode(this.refs.addZipInput).value = "";
+            this.addImagesInputRef.current.value = "";
+            this.addZipInputRef.current.value = "";
         }
         
         let names = Object.keys(data);
@@ -219,7 +224,7 @@ class ImagesList extends React.Component {
         
         return sorted;
     }
-
+        
     clear() {
         let keys = Object.keys(this.state.images);
         if(keys.length) {
@@ -338,7 +343,7 @@ class ImagesList extends React.Component {
 
         return ret;
     }
-    
+
     handleImageItemSelected(e) {
         let path = e.path;
         let images = this.state.images;
@@ -393,7 +398,7 @@ class ImagesList extends React.Component {
         this.setState({images: this.state.images});
         this.emitSelectedChanges();
     }
-    
+
     emitSelectedChanges() {
         let selected = [];
 
@@ -405,7 +410,7 @@ class ImagesList extends React.Component {
         
         Observer.emit(GLOBAL_EVENT.IMAGES_LIST_SELECTED_CHANGED, selected);
     }
-    
+
     createImagesFolder(name="", path="") {
         return {
             isFolder: true,
@@ -469,7 +474,7 @@ class ImagesList extends React.Component {
 
         return res;
     }
-
+    
     deleteSelectedImages() {
         let images = this.state.images;
         
@@ -496,12 +501,12 @@ class ImagesList extends React.Component {
             <span>
                 <div className="btn back-800 border-color-gray color-white file-upload" title={I18.f("ADD_IMAGES_TITLE")}>
                     {I18.f("ADD_IMAGES")}
-                    <input type="file" ref="addImagesInput" multiple accept="image/png,image/jpg,image/jpeg,image/gif" onChange={this.addImages} />
+                    <input type="file" ref={this.addImagesInputRef} multiple accept="image/png,image/jpg,image/jpeg,image/gif" onChange={this.addImages} />
                 </div>
     
                 <div className="btn back-800 border-color-gray color-white file-upload" title={I18.f("ADD_ZIP_TITLE")}>
                     {I18.f("ADD_ZIP")}
-                    <input type="file" ref="addZipInput" accept=".zip,application/octet-stream,application/zip,application/x-zip,application/x-zip-compressed" onChange={this.addZip} />
+                    <input type="file" ref={this.addZipInputRef} accept=".zip,application/octet-stream,application/zip,application/x-zip,application/x-zip-compressed" onChange={this.addZip} />
                 </div>
             </span>
         );
@@ -524,7 +529,7 @@ class ImagesList extends React.Component {
     render() {
         let data = this.getImagesTree(this.state.images);
         
-        let dropHelp = Object.keys(this.state.images).length > 0 ? null : (<div ref="dropHelp" className="image-drop-help">{I18.f("IMAGE_DROP_HELP")}</div>);
+        let dropHelp = Object.keys(this.state.images).length > 0 ? null : (<div ref={this.dropHelpRef} className="image-drop-help">{I18.f("IMAGE_DROP_HELP")}</div>);
 
         return (
             <div className="images-list border-color-gray back-white">
@@ -546,7 +551,7 @@ class ImagesList extends React.Component {
 
                 </div>
                 
-                <div ref="imagesTree" className="images-tree">
+                <div ref={this.imagesTreeRef} className="images-tree">
                     <ImagesTree data={data} />
                     {dropHelp}
                 </div>

@@ -5,6 +5,8 @@ import I18 from '../utils/I18';
 class OldBrowserBlocker extends React.Component {
     constructor(props) {
         super(props);
+
+        this.shaderRef = React.createRef();
     }
 
     render() {
@@ -25,7 +27,7 @@ class OldBrowserBlocker extends React.Component {
         
         if(!ok) {
             return (
-                <div ref="shader" className="old-browser-shader">
+                <div ref={this.shaderRef} className="old-browser-shader">
                     <div className="old-browser-content">
                         {I18.f("OLD_BROWSER_MESSAGE1")}
                         <br/><br/>

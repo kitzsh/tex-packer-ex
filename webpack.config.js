@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const argv = require('optimist').argv;
 
+
 let entry = [
     'babel-polyfill',
     './src/client/index'
@@ -36,7 +37,9 @@ if (argv.build) {
         outputDir = '../electron/www/';
     }
 
-    plugins.push(new CopyWebpackPlugin([{from: 'src/client/resources', to: outputDir}]));
+    plugins.push(new CopyWebpackPlugin({
+        patterns: [{from: 'src/client/resources', to: outputDir}]
+    }));
 
     devtool = false;
     output = outputDir + 'static/js/index.js';
@@ -44,7 +47,9 @@ if (argv.build) {
 }
 else {
     entry.push('webpack-dev-server/client?http://localhost:4000');
-    plugins.push(new CopyWebpackPlugin([{from: 'src/client/resources', to: './'}]));
+    plugins.push(new CopyWebpackPlugin({
+        patterns: [{from: 'src/client/resources', to: './'}]
+    }));
 }
 
 let config = {
@@ -85,6 +90,12 @@ if (target === 'electron-renderer') {
     config.resolve = {alias: {'platform': path.resolve(__dirname, './src/client/platform/electron')}};
 } else {
     config.resolve = {alias: {'platform': path.resolve(__dirname, './src/client/platform/web')}};
+}
+
+config.resolve.fallback = {
+    "stream": require.resolve("stream-browserify"),
+    "timers": require.resolve("timers-browserify"),
+    "buffer": require.resolve("buffer/")
 }
 
 module.exports = config;
