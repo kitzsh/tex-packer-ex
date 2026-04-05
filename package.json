@@ -58,8 +58,8 @@
     "predeploy": "npm run build-web",
     "deploy": "gh-pages -d dist/web",
     "start-electron": "webpack-dev-server --host 127.0.0.1 --port 4000 --platform electron",
-    "build-web": "webpack --build --platform web",
-    "build-electron": "webpack --build --platform electron"
+    "build-web": "webpack --env build --env platform=web",
+    "build-electron": "webpack --env build --env platform=electron"
   },
   "repository": {
     "type": "git",
