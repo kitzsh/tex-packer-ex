@@ -81,8 +81,8 @@ class PackProperties extends React.Component {
         data.tinifyKey = data.tinifyKey === undefined ? "" : data.tinifyKey;
         data.fileName = data.fileName || "pack-result";
         data.savePath = data.savePath || "";
-        data.width = data.width === undefined ? 2048 : data.width;
-        data.height = data.height === undefined ? 2048 : data.height;
+        data.width = data.width === undefined ? 8192 : data.width;
+        data.height = data.height === undefined ? 8192 : data.height;
         data.fixedSize = data.fixedSize === undefined ? false : data.fixedSize;
         data.powerOfTwo = data.powerOfTwo === undefined ? false : data.powerOfTwo;
         data.padding = data.padding === undefined ? 0 : data.padding;
