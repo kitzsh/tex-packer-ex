@@ -67032,7 +67032,7 @@ var Sparrow = /*#__PURE__*/function (_Splitter) {
           try {
             for (_iterator.s(); !(_step = _iterator.n()).done;) {
               var item = _step.value;
-              item = item['$'];
+              item = item["$"];
               if (isNaN(item.frameX)) item.frameX = 0;
               if (isNaN(item.frameY)) item.frameY = 0;
               if (isNaN(item.frameWidth)) item.frameWidth = item.width;
@@ -67064,7 +67064,7 @@ var Sparrow = /*#__PURE__*/function (_Splitter) {
                   w: item.frameWidth,
                   h: item.frameHeight
                 },
-                rotated: item.r === 'y',
+                rotated: item.rotated === "true",
                 trimmed: trimmed
               });
             }
@@ -67081,7 +67081,7 @@ var Sparrow = /*#__PURE__*/function (_Splitter) {
   }, {
     key: "type",
     get: function get() {
-      return 'Sparrow/Starling';
+      return "Sparrow/Starling";
     }
   }]);
 }(splitters_Splitter);
