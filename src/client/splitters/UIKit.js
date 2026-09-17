@@ -1,11 +1,11 @@
 import Splitter from './Splitter';
 
-import plist from 'plist';
+import { parse } from 'plist';
 
 class UIKit extends Splitter {
     static check(data, cb) {
         try {
-            let atlas = plist.parse(data);
+            let atlas = parse(data);
             
             if(atlas && atlas.frames) {
                 let names = Object.keys(atlas.frames);
@@ -37,7 +37,7 @@ class UIKit extends Splitter {
         let res = [];
 
         try {
-            let atlas = plist.parse(data);
+            let atlas = parse(data);
             let names = Object.keys(atlas.frames);
             
             for(let name of names) {

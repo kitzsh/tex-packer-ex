@@ -47,7 +47,6 @@ export default (env) => {
         output = outputDir + 'static/js/index.js';
     }
     else {
-        entry.push('webpack-dev-server/client?http://localhost:4000');
         plugins.push(new CopyWebpackPlugin({
             patterns: [{from: 'src/client/resources', to: './'}]
         }));
