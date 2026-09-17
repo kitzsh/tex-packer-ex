@@ -1,20 +1,22 @@
-import Splitter from './Splitter';
+import Splitter from "./Splitter";
 
-import xmlParser from 'xml2js';
+import xmlParser from "xml2js";
 
 class Sparrow extends Splitter {
     static check(data, cb) {
         try {
             xmlParser.parseString(data, (err, atlas) => {
-                if(err) {
+                if (err) {
                     cb(false);
                     return;
                 }
-                
-                cb(atlas.TextureAtlas && Array.isArray(atlas.TextureAtlas.sprite));
+
+                cb(
+                    atlas.TextureAtlas &&
+                        Array.isArray(atlas.TextureAtlas.sprite),
+                );
             });
-        }
-        catch(e) {
+        } catch (e) {
             cb(false);
         }
     }
@@ -23,19 +25,17 @@ class Sparrow extends Splitter {
         let res = [];
 
         try {
-
             xmlParser.parseString(data, (err, atlas) => {
-                if(err) {
+                if (err) {
                     cb(res);
                     return;
                 }
 
                 let list = atlas.TextureAtlas.SubTexture;
-                
-                for(let item of list) {
-                    item = item['$'];
 
-                    
+                for (let item of list) {
+                    item = item["$"];
+
                     if (isNaN(item.frameX)) item.frameX = 0;
                     if (isNaN(item.frameY)) item.frameY = 0;
                     if (isNaN(item.frameWidth)) item.frameWidth = item.width;
@@ -51,41 +51,39 @@ class Sparrow extends Splitter {
                     item.frameHeight *= 1;
 
                     let trimmed = item.w < item.oW || item.h < item.oH;
-                    
+
                     res.push({
                         name: Splitter.fixFileName(item.name),
                         frame: {
                             x: item.x,
                             y: item.y,
                             w: item.width,
-                            h: item.height
+                            h: item.height,
                         },
                         spriteSourceSize: {
                             x: item.frameX,
                             y: item.frameY,
                             w: item.width,
-                            h: item.height
+                            h: item.height,
                         },
                         sourceSize: {
                             w: item.frameWidth,
-                            h: item.frameHeight
+                            h: item.frameHeight,
                         },
-                        rotated: item.r === 'y',
-                        trimmed: trimmed
+                        rotated: item.rotated === "true",
+                        trimmed: trimmed,
                     });
                 }
-                
+
                 cb(res);
             });
-        }
-        catch(e) {
-        }
+        } catch (e) {}
 
         cb(res);
     }
 
     static get type() {
-        return 'Sparrow/Starling';
+        return "Sparrow/Starling";
     }
 }
 
