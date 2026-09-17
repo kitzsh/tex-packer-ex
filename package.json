@@ -7,7 +7,7 @@
   "download": "https://kitzsh.github.io/tex-packer-ex",
   "webApp": "https://kitzsh.github.io/tex-packer-ex",
   "main": "src/index.js",
-  "tinifyUrl": "http://free-tex-packer.com/server/tinify.php",
+  "tinifyUrl": "",
   "localizations": [
     "en",
     "es",

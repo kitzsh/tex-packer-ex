@@ -9,15 +9,19 @@ Tex-Packer-EX is a fork of [Free texture packer](https://github.com/odrick/free-
 
 This was primarily created with Friday Night Funkin' modding in mind, however it can be used for any other project.
 
+
 # Free texture packer
+
+>[!CAUTION]
+All links and references to the Free Texture Packer website (free-tex-packer dot com) have been removed, as the developers likely no longer own the domain. Do not visit this domain, as it will redirect you to a malicious website.
 
 Free texture packer creates sprite sheets for your game or site. Rotation, trimming, multipacking, various export formats (json, xml, css, pixi.js, godot, phaser, cocos2d). Zip support. TinyPNG support. Split sheet tool.
 
-![screenshot](https://free-tex-packer.com/wp-content/uploads/2019/01/screenshot.png)
+![screenshot](./screenshot.png)
 
-Homepage: [https://free-tex-packer.com](https://free-tex-packer.com)
+Homepage: [redacted]
 
-Web version: [https://free-tex-packer.com/app](https://free-tex-packer.com/app)
+Web version: [redacted]
 
 Desktop versions for win, mac, linux: [https://github.com/odrick/free-tex-packer/releases](https://github.com/odrick/free-tex-packer/releases)
 

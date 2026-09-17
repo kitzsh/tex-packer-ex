@@ -29,7 +29,7 @@ class MainHeader extends React.Component {
             <div className="main-header back-900 color-white">
                 <div className="main-header-app-name">
                     <img src="static/images/logo.png" />
-                    {appInfo.displayName} {appInfo.version} (Based on <a href="https://free-tex-packer.com/">Free texture packer</a>)
+                    {appInfo.displayName} {appInfo.version} (Based on <a href="https://github.com/odrick/free-tex-packer/">Free texture packer</a>)
                 </div>
 
                 <div className="main-header-about" onClick={this.showAbout}>
